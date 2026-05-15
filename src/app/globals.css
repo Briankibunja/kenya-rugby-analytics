@@ -20,7 +20,19 @@
 }
 
 body {
-  background: var(--background);
+  background-color: #f8faf6;
+  background-image:
+    radial-gradient(circle at top, rgba(21, 128, 61, 0.05), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(185, 28, 28, 0.045), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(248, 250, 246, 0.95));
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.brand-blend {
+  background: linear-gradient(90deg, #b91c1c 0%, #15803d 52%, #111111 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
