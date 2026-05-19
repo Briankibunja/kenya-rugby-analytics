@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth, type UserRole } from "../contexts/AuthContext";
 import heroImg from "../../40986ec5-5d7d-462e-870e-3c96d958122b.png";
+import AdminNavGuard from "./AdminNavGuard";
 
 type SocialLink = {
   label: string;
@@ -125,6 +126,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="flex min-h-screen flex-1 flex-col text-white">
+      <AdminNavGuard />
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
