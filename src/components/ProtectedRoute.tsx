@@ -19,16 +19,32 @@ export function ProtectedRoute({
   }, [router]);
 
   useEffect(() => {
-    if (user === null) {
+    // Use an effective role that falls back to localStorage so role-switching
+    // updates applied via `setRole` (which writes to localStorage) are visible
+    // immediately and avoid a race where `user` state hasn't propagated yet.
+    let effectiveRole: string | null = null;
+
+    try {
+      if (user && user.role) {
+        effectiveRole = user.role;
+      } else {
+        const saved = localStorage.getItem("rugby-user");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          effectiveRole = parsed?.role ?? null;
+        }
+      }
+    } catch {
+      effectiveRole = user?.role ?? null;
+    }
+
+    if (!effectiveRole) {
       router.replace("/login");
       return;
     }
 
-    if (!allowedRoles.includes(user.role)) {
-      if (switchingRole) {
-        return;
-      }
-
+    if (!allowedRoles.includes(effectiveRole as any)) {
+      if (switchingRole) return;
       logout();
       router.replace("/login");
     }
