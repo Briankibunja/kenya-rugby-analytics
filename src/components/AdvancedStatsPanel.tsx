@@ -14,20 +14,20 @@ interface AdvancedStatsPanelProps {
 
 export default function AdvancedStatsPanel({ stats }: AdvancedStatsPanelProps) {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white shadow-xl overflow-hidden">
-      <div className="p-5 border-b border-slate-200">
-        <h3 className="text-lg font-semibold text-slate-900">Advanced Match Statistics</h3>
-        <p className="text-sm text-slate-600 mt-1">Detailed breakdown of key performance indicators</p>
+    <div className="overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+      <div className="border-b border-white/10 p-5">
+        <h3 className="text-lg font-semibold text-white">Advanced Match Statistics</h3>
+        <p className="mt-1 text-sm text-white/60">Detailed breakdown of key performance indicators</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
+      <div className="grid grid-cols-1 gap-4 p-5 md:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat, idx) => (
-          <div key={idx} className="rounded-2xl border border-slate-100 bg-slate-50 p-4 hover:bg-slate-100 transition">
+          <div key={idx} className="rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-600">{stat.label}</p>
+                <p className="text-sm text-white/60">{stat.label}</p>
                 <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-slate-900">{stat.value}</span>
+                  <span className="text-2xl font-bold text-white">{stat.value}</span>
                   {stat.trend && (
                     <span
                       className={`text-xs font-medium ${
@@ -38,7 +38,7 @@ export default function AdvancedStatsPanel({ stats }: AdvancedStatsPanelProps) {
                           : "text-amber-400"
                       }`}
                     >
-                      {stat.trend === "up" ? "↑" : stat.trend === "down" ? "↓" : "→"}
+                        <p className="mt-1 text-xs text-white/45">{stat.detail}</p>
                     </span>
                   )}
                 </div>

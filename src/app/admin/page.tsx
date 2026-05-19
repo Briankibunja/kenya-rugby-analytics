@@ -1,16 +1,37 @@
 "use client";
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import { useAuth } from "../../contexts/AuthContext";
-import EditableEventList, { type EditableEvent } from "../../components/EditableEventList";
-import EventTimeline from "../../components/EventTimeline";
 import MetricCard from "../../components/MetricCard";
-import MatchManagementTable, { type Match } from "../../components/MatchManagementTable";
-import VideoPlayer from "../../components/VideoPlayer";
-import UserManagementTable from "../../components/UserManagementTable";
-import UserFormModal from "../../components/UserFormModal";
-import { mockAdminMetrics, mockEvents, mockUsers, mockMatch } from "../../lib/mockData";
+import type { EditableEvent } from "../../components/EditableEventList";
+import type { Match } from "../../components/MatchManagementTable";
 import type { User } from "../../components/UserManagementTable";
+import { mockAdminMetrics, mockEvents, mockUsers, mockMatch } from "../../lib/mockData";
 import { canEditEvents, canUploadMatch } from "../../lib/permissions";
+
+const EditableEventList = dynamic(() => import("../../components/EditableEventList"), {
+  ssr: false,
+  loading: () => <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-white/50">Loading event editor…</div>,
+});
+const EventTimeline = dynamic(() => import("../../components/EventTimeline"), {
+  ssr: false,
+  loading: () => <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-white/50">Loading timeline…</div>,
+});
+const MatchManagementTable = dynamic(() => import("../../components/MatchManagementTable"), {
+  ssr: false,
+  loading: () => <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-white/50">Loading match table…</div>,
+});
+const VideoPlayer = dynamic(() => import("../../components/VideoPlayer"), {
+  ssr: false,
+  loading: () => <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-white/50">Loading video player…</div>,
+});
+const UserManagementTable = dynamic(() => import("../../components/UserManagementTable"), {
+  ssr: false,
+  loading: () => <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-white/50">Loading users…</div>,
+});
+const UserFormModal = dynamic(() => import("../../components/UserFormModal"), {
+  ssr: false,
+});
 
 const TEAMS = ["KCB Rugby", "Kabras Sugar RFC", "Nakuru RFC", "Uasin Gishu RFC"];
 
@@ -62,6 +83,7 @@ export default function AdminPage() {
   const role = user?.role ?? "admin";
   const allowUploadMatch = canUploadMatch(role);
   const allowEditEvents = canEditEvents(role);
+  const reviewTotal = mockAdminMetrics.matchesProcessed + mockAdminMetrics.pendingReview;
 
   const handleAddUser = () => {
     setSelectedUser(null);
@@ -146,35 +168,75 @@ export default function AdminPage() {
   };
 
   return (
-    <section className="space-y-6 text-slate-900">
+    <section className="space-y-4 text-white">
       <div>
         <h2 className="text-3xl font-semibold tracking-tight">Match control center</h2>
-        <p className="mt-2 max-w-2xl text-sm text-slate-600">
+        <p className="mt-2 max-w-2xl text-sm text-white/60">
           Validate AI detections, correct errors, and publish trusted match data for coaches and fans.
         </p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_320px] items-start">
-        <div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <MetricCard label="Upload match" value={allowUploadMatch ? "Allowed" : "Blocked"} detail="Admin-only permission" surface="emerald" accent={allowUploadMatch ? "emerald" : "rose"} />
-            <MetricCard label="Edit events" value={allowEditEvents ? "Allowed" : "Blocked"} detail="Admin-only permission" surface="sky" accent={allowEditEvents ? "sky" : "rose"} />
-            <MetricCard label="Current role" value={user?.role ?? "admin"} detail="Protected by route and action gates" surface="amber" accent="amber" />
-            <MetricCard label="Review queue" value={mockAdminMetrics.pendingReview.toString()} detail="Matches waiting for approval" surface="rose" accent="rose" pie={{ data: [{ label: 'Pending', value: mockAdminMetrics.pendingReview, color: '#fb7185' }, { label: 'Other', value: Math.max(0, mockAdminMetrics.matchesProcessed - mockAdminMetrics.pendingReview), color: '#e5e7eb' }], size: 64, innerRadius: 16 }} />
+      <div className="grid gap-4 lg:grid-cols-1 items-start">
+        <div className="w-full">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <MetricCard
+              label="Upload match"
+              value={allowUploadMatch ? "Allowed" : "Blocked"}
+              detail="Admin-only permission"
+              surface="emerald"
+              accent={allowUploadMatch ? "emerald" : "rose"}
+              chart={{ value: allowUploadMatch ? 100 : 0, total: 100, valueLabel: allowUploadMatch ? "Allowed" : "Blocked", remainderLabel: allowUploadMatch ? "Blocked" : "Allowed", colors: ["#22c55e", "#1f2937"], showCenterLabel: false }}
+            />
+            <MetricCard
+              label="Edit events"
+              value={allowEditEvents ? "Allowed" : "Blocked"}
+              detail="Admin-only permission"
+              surface="sky"
+              accent={allowEditEvents ? "sky" : "rose"}
+              chart={{ value: allowEditEvents ? 100 : 0, total: 100, valueLabel: allowEditEvents ? "Allowed" : "Blocked", remainderLabel: allowEditEvents ? "Blocked" : "Allowed", colors: ["#38bdf8", "#1f2937"], showCenterLabel: false }}
+            />
+            <MetricCard label="Current role" value={user?.role ?? "admin"} detail="Protected by route and action gates" surface="amber" accent="amber" chart={{ value: role === "admin" ? 100 : 25, total: 100, valueLabel: role, remainderLabel: "Other", colors: ["#f59e0b", "#1f2937"], showCenterLabel: false }} />
+            <MetricCard label="Review queue" value={mockAdminMetrics.pendingReview.toString()} detail="Matches waiting for approval" surface="rose" accent="rose" chart={{ value: mockAdminMetrics.pendingReview, total: reviewTotal, valueLabel: "Review", remainderLabel: "Processed", colors: ["#fb7185", "#1f2937"], showCenterLabel: false }} />
           </div>
 
-          <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <MetricCard label="Matches processed" value={mockAdminMetrics.matchesProcessed.toString()} detail="7s and 15s fixtures this week" surface="teal" accent={"teal"} pie={{ data: [{ label: 'Processed', value: mockAdminMetrics.matchesProcessed, color: '#60a5fa' }, { label: 'Other', value: 0, color: '#e5e7eb' }], size: 64, innerRadius: 16 }} />
-            <MetricCard label="Confidence avg." value={`${mockAdminMetrics.confidenceAvg}%`} detail="Across detection and event models" surface="indigo" accent="sky" />
-            <MetricCard label="Pending review" value={mockAdminMetrics.pendingReview.toString()} detail="Needs human validation before publishing" surface="violet" accent="amber" />
-            <MetricCard label="Auto-approved" value={`${mockAdminMetrics.autoApproved}%`} detail="Events cleared without manual edits" surface="lime" accent="rose" pie={{ data: [{ label: 'Auto-approved', value: mockAdminMetrics.autoApproved, color: '#34d399' }, { label: 'Not', value: 100 - mockAdminMetrics.autoApproved, color: '#94a3b8' }], size: 64, innerRadius: 16 }} />
+          <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <MetricCard
+              label="Matches processed"
+              value={mockAdminMetrics.matchesProcessed.toString()}
+              detail="7s and 15s fixtures this week"
+              surface="teal"
+              accent="teal"
+              chart={{ value: mockAdminMetrics.matchesProcessed, total: reviewTotal, valueLabel: "Processed", remainderLabel: "Queued", colors: ["#14b8a6", "#1f2937"], showCenterLabel: false }}
+            />
+            <MetricCard
+              label="Confidence avg."
+              value={`${mockAdminMetrics.confidenceAvg}%`}
+              detail="Across detection and event models"
+              surface="indigo"
+              accent="sky"
+              chart={{ value: mockAdminMetrics.confidenceAvg, total: 100, valueLabel: "Confidence", remainderLabel: "Gap", colors: ["#818cf8", "#1f2937"], showCenterLabel: false }}
+            />
+            <MetricCard
+              label="Pending review"
+              value={mockAdminMetrics.pendingReview.toString()}
+              detail="Needs human validation before publishing"
+              surface="violet"
+              accent="amber"
+              chart={{ value: mockAdminMetrics.pendingReview, total: reviewTotal, valueLabel: "Pending", remainderLabel: "Done", colors: ["#a855f7", "#1f2937"], showCenterLabel: false }}
+            />
+            <MetricCard
+              label="Auto-approved"
+              value={`${mockAdminMetrics.autoApproved}%`}
+              detail="Events cleared without manual edits"
+              surface="lime"
+              accent="rose"
+              chart={{ value: mockAdminMetrics.autoApproved, total: 100, valueLabel: "Auto", remainderLabel: "Manual", colors: ["#84cc16", "#1f2937"], showCenterLabel: false }}
+            />
           </div>
         </div>
-
-        <div />
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
+      <div className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">
         <VideoPlayer />
         <EventTimeline events={timelineEvents} />
       </div>

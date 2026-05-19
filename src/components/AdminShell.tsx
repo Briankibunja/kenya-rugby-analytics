@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth, type UserRole } from "../contexts/AuthContext";
+import heroImg from "../../40986ec5-5d7d-462e-870e-3c96d958122b.png";
 
 type SocialLink = {
   label: string;
@@ -50,11 +53,10 @@ const socialLinks: SocialLink[] = [
 ];
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
-  const { user, logout, setRole, clearRoleSwitch } = useAuth();
+  const { user, logout, setRole, clearRoleSwitch, switchingRole } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [pendingRoleRoute, setPendingRoleRoute] = useState<UserRole | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -69,23 +71,14 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
   const handleLogout = () => {
     logout();
-    router.push("/login");
+    router.replace("/login");
   };
 
-  useEffect(() => {
-    if (!pendingRoleRoute || user?.role !== pendingRoleRoute) {
-      return;
-    }
-
-    router.push(`/${pendingRoleRoute}`);
-  }, [pendingRoleRoute, router, user?.role]);
-
-  useEffect(() => {
-    if (pendingRoleRoute && pathname === `/${pendingRoleRoute}`) {
-      setPendingRoleRoute(null);
-      clearRoleSwitch();
-    }
-  }, [clearRoleSwitch, pathname, pendingRoleRoute]);
+  const handleReturnToAdmin = () => {
+    setRole("admin");
+    setMenuOpen(false);
+    clearRoleSwitch();
+  };
 
   useEffect(() => {
     if (!menuOpen) {
@@ -112,123 +105,174 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const handleSwitch = (role: UserRole) => {
     setRole(role);
     setMenuOpen(false);
-    setPendingRoleRoute(role);
   };
 
-  return (
-    <div className="flex min-h-screen flex-1 flex-col bg-[linear-gradient(180deg,#f8faf8_0%,#ffffff_18%,#ffffff_82%,#f8faf8_100%)] text-slate-900">
-      <header className="relative border-b border-black/10 bg-gradient-to-r from-red-700 via-green-700 to-black text-white shadow-lg">
-        <button
-          type="button"
-          ref={menuButtonRef}
-          onClick={() => setMenuOpen((current) => !current)}
-          className="absolute left-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white transition hover:bg-white/20 sm:left-6 sm:top-6"
-          aria-expanded={menuOpen}
-          aria-haspopup="menu"
-          aria-label="Open menu"
-        >
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <path d="M3 6h18M3 12h18M3 18h18" />
-          </svg>
-        </button>
+  useEffect(() => {
+    ["/admin", "/coach", "/player", "/fan", "/login"].forEach((path) => {
+      router.prefetch(path);
+    });
+  }, [router]);
 
-        {menuOpen && (
+  return (
+    <div className="flex min-h-screen flex-1 flex-col text-white">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-md">
+        <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3">
+            <Image
+              src="https://www.kru.co.ke/logo-lion.svg"
+              alt="Kenya Rugby Union"
+              width={80}
+              height={80}
+              priority
+              className="h-14 w-14 shrink-0 object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)] sm:h-16 sm:w-16 lg:h-20 lg:w-20"
+            />
+
+            <div className="leading-tight">
+              <div className="text-sm font-extrabold uppercase tracking-[0.18em] brand-blend">Kenya Rugby Analytics</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {!(switchingRole !== null && user?.role !== "admin") && (
+              <button
+                type="button"
+                ref={menuButtonRef}
+                onClick={() => setMenuOpen((current) => !current)}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition hover:bg-white/10"
+                aria-expanded={menuOpen}
+                aria-haspopup="menu"
+                aria-label="Open menu"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M3 6h18M3 12h18M3 18h18" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {menuOpen && !(switchingRole !== null && user?.role !== "admin") && (
           <div
             ref={menuRef}
             role="menu"
-            className="absolute left-4 top-16 z-20 w-72 rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_24px_70px_rgba(15,23,42,0.22)] backdrop-blur sm:left-6 sm:top-18"
+            className="absolute right-4 top-16 z-20 w-72 rounded-2xl border border-white/10 bg-[#0b0b0b] p-4 text-white shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur sm:right-6 sm:top-18"
           >
-            <div className="space-y-2 border-b border-slate-200 pb-3">
-              <p className="text-sm font-semibold text-slate-900">{currentPanelTitle}</p>
-              {isAdminPage && <p className="text-xs text-slate-500">Manage access and switch views</p>}
+            <div className="space-y-2 border-b border-white/10 pb-3">
+              <p className="text-sm font-semibold text-white">{currentPanelTitle}</p>
+              {isAdminPage && <p className="text-xs text-white/55">Manage access and switch views</p>}
             </div>
 
             <div className="mt-3 flex flex-col gap-2">
               <button
                 type="button"
                 onClick={handleLogout}
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 text-left text-sm font-medium text-slate-800 transition hover:border-slate-300 hover:bg-slate-100"
+                className="w-full rounded-lg border border-white/10 bg-white/5 py-2 text-left text-sm font-medium text-white transition hover:bg-white/10"
               >
                 Logout
               </button>
 
               {isAdminPage && (
-                <div className="mt-2 border-t border-slate-100 pt-3">
-                  <p className="mb-2 text-xs uppercase tracking-[0.3em] text-slate-500">View as</p>
+                <div className="mt-2 border-t border-white/10 pt-3">
+                  <p className="mb-2 text-xs uppercase tracking-[0.3em] text-white/50">View as</p>
                   <div className="grid grid-cols-3 gap-2">
-                    <button
-                      type="button"
+                    <Link
+                      href="/admin"
                       onClick={() => handleSwitch("admin")}
-                      className="rounded-lg border border-slate-200 bg-white py-2 text-center text-sm font-medium text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50"
+                      className="rounded-lg border border-white/10 bg-white/5 py-2 text-center text-sm font-medium text-white transition hover:border-emerald-400 hover:bg-emerald-400/10"
                     >
                       Admin
-                    </button>
-                    <button
-                      type="button"
+                    </Link>
+                    <Link
+                      href="/coach"
                       onClick={() => handleSwitch("coach")}
-                      className="rounded-lg border border-slate-200 bg-white py-2 text-center text-sm font-medium text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50"
+                      className="rounded-lg border border-white/10 bg-white/5 py-2 text-center text-sm font-medium text-white transition hover:border-emerald-400 hover:bg-emerald-400/10"
                     >
                       Coach
-                    </button>
-                    <button
-                      type="button"
+                    </Link>
+                    <Link
+                      href="/player"
                       onClick={() => handleSwitch("player")}
-                      className="rounded-lg border border-slate-200 bg-white py-2 text-center text-sm font-medium text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50"
+                      className="rounded-lg border border-white/10 bg-white/5 py-2 text-center text-sm font-medium text-white transition hover:border-emerald-400 hover:bg-emerald-400/10"
                     >
                       Player
-                    </button>
+                    </Link>
                   </div>
                   <div className="mt-2">
-                    <button
-                      type="button"
+                    <Link
+                      href="/fan"
                       onClick={() => handleSwitch("fan")}
-                      className="mt-2 w-full rounded-lg border border-slate-200 bg-white py-2 text-center text-sm font-medium text-slate-800 transition hover:border-emerald-300 hover:bg-emerald-50"
+                      className="mt-2 block w-full rounded-lg border border-white/10 bg-white/5 py-2 text-center text-sm font-medium text-white transition hover:border-emerald-400 hover:bg-emerald-400/10"
                     >
                       Fan
-                    </button>
+                    </Link>
                   </div>
                 </div>
               )}
             </div>
           </div>
         )}
-
-          <div className="mx-auto flex w-full max-w-[1600px] flex-col items-center gap-2 px-4 py-4 text-center sm:px-6 sm:py-5 lg:px-8 lg:py-6">
-          <img
-            src="https://www.kru.co.ke/logo-lion.svg"
-            alt="Kenya Rugby Union"
-            className="h-12 w-12 shrink-0 object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)] sm:h-14 sm:w-14 lg:h-16 lg:w-16"
-          />
-          <h1 className="max-w-full text-xl font-extrabold tracking-[0.16em] text-white drop-shadow-[0_3px_8px_rgba(0,0,0,0.85)] sm:text-2xl lg:text-3xl">
-            Kenya Rugby Analytics
-          </h1>
-        </div>
       </header>
 
+      {/* Full-width hero image placed directly below the header */}
+      <div className="w-full">
+        <Image
+          src={heroImg.src}
+          alt="Kenya Rugby - Hero"
+          width={1920}
+          height={768}
+          priority={false}
+          sizes="100vw"
+          className="h-56 w-full object-cover sm:h-72 lg:h-96"
+        />
+      </div>
+
+      {switchingRole !== null && user?.role !== "admin" && (
+        <div className="fixed right-4 top-4 z-[60] sm:right-6 sm:top-6 lg:right-8 lg:top-8">
+          <Link
+            href="/admin"
+            onClick={handleReturnToAdmin}
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-100 shadow-[0_12px_30px_rgba(0,0,0,0.25)] backdrop-blur transition hover:bg-emerald-400/15"
+          >
+            Return to Admin
+          </Link>
+        </div>
+      )}
+
       <div className="flex min-h-0 flex-1 flex-col px-3 py-3 sm:px-4 sm:py-4 lg:px-6 lg:py-6">
-        <main className="flex-1 overflow-y-auto rounded-[2rem] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.93)_10%,rgba(255,255,255,0.92)_90%,rgba(255,255,255,0.96)_100%),linear-gradient(180deg,rgba(185,28,28,0.06)_0%,rgba(21,128,61,0.03)_50%,rgba(17,24,39,0.05)_100%)] bg-blend-normal px-4 py-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <main className="flex-1 overflow-y-auto rounded-[2rem] panel-surface px-4 py-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-sm sm:px-6 sm:py-8 lg:px-8 lg:py-10">
           <div className="mx-auto w-full max-w-none min-w-0">{children}</div>
         </main>
 
-        <footer className="border-t border-black/10 bg-gradient-to-r from-black via-green-800 to-red-700 text-white shadow-[0_-12px_40px_rgba(0,0,0,0.2)]">
-          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <footer className="border-t border-white/10 bg-black">
+          <div className="mx-auto grid w-full max-w-[1600px] gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1.1fr_0.8fr_1fr] lg:px-8">
             <div>
-              <p className="text-xs uppercase tracking-[0.5em] text-white/65">Kenya Rugby Union</p>
-              <p className="mt-1 text-sm text-white/80">Connect with us on social media</p>
+              <div className="text-2xl font-black uppercase tracking-[0.18em]">Kenya Rugby Union</div>
+              <p className="mt-3 max-w-sm text-sm leading-6 text-white/65">
+                The official home of Kenya rugby. Uniting communities, developing talent, inspiring a nation.
+              </p>
             </div>
-            <div className="flex flex-wrap gap-3">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={link.label}
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:-translate-y-0.5 hover:bg-white/20"
-                >
-                  {link.icon}
-                </a>
-              ))}
+            <div>
+              <div className="text-sm font-bold uppercase tracking-[0.24em] text-white/80">Follow us</div>
+              <div className="mt-3 flex flex-wrap gap-3">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={link.label}
+                    className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition hover:-translate-y-0.5 hover:bg-white/10"
+                  >
+                    {link.icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm font-bold uppercase tracking-[0.24em] text-white/80">Kenya Rugby Analytics</div>
+              <p className="mt-3 text-sm leading-6 text-white/65">
+                Live analytics, role-aware dashboards, and match control tools for every part of the game.
+              </p>
             </div>
           </div>
         </footer>

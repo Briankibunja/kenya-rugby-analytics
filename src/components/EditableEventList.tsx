@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Edit2, Trash2, Plus, Check, X } from "lucide-react";
+import { Edit2, Trash2, Plus, Check, X } from "./Icons";
 
 export interface EditableEvent {
   id: string;
@@ -58,16 +58,16 @@ export default function EditableEventList({
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white shadow-xl">
-      <div className="p-5 border-b border-slate-200">
+    <div className="overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+      <div className="border-b border-white/10 p-5">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-slate-900">AI Output Validation</h3>
-            <p className="text-sm text-slate-600 mt-1">Edit wrong detections, add missing events, and approve final stats</p>
+            <h3 className="text-lg font-semibold text-white">AI Output Validation</h3>
+            <p className="mt-1 text-sm text-white/60">Edit wrong detections, add missing events, and approve final stats</p>
           </div>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="flex items-center gap-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-slate-900 px-4 py-2 text-sm font-medium transition"
+            className="flex items-center gap-2 rounded-lg border border-emerald-400/20 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-500/15"
           >
             <Plus size={16} />
             Add Event
@@ -76,47 +76,47 @@ export default function EditableEventList({
       </div>
 
       {showAddForm && (
-        <div className="border-b border-slate-200 bg-slate-50 p-5 space-y-4">
+        <div className="space-y-4 border-b border-white/10 bg-black/30 p-5">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-2">Time (MM:SS)</label>
+              <label className="mb-2 block text-xs font-semibold text-white/55">Time (MM:SS)</label>
               <input
                 type="text"
                 placeholder="03:12"
                 value={newEvent.time}
                 onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 text-sm"
+                className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-2">Event Label</label>
+              <label className="mb-2 block text-xs font-semibold text-white/55">Event Label</label>
               <input
                 type="text"
                 placeholder="e.g., Try scored"
                 value={newEvent.label}
                 onChange={(e) => setNewEvent({ ...newEvent, label: e.target.value })}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 text-sm"
+                className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-2">Confidence %</label>
+              <label className="mb-2 block text-xs font-semibold text-white/55">Confidence %</label>
               <input
                 type="number"
                 min="0"
                 max="100"
                 value={Math.round(newEvent.confidence * 100)}
                 onChange={(e) => setNewEvent({ ...newEvent, confidence: Number(e.target.value) / 100 })}
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 text-sm"
+                className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-2">Category</label>
+              <label className="mb-2 block text-xs font-semibold text-white/55">Category</label>
               <select
                 value={newEvent.tone}
                 onChange={(e) =>
                   setNewEvent({ ...newEvent, tone: e.target.value as EditableEvent["tone"] })
                 }
-                className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 text-sm"
+                className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white"
               >
                 <option value="emerald">Positive</option>
                 <option value="sky">Standard</option>
@@ -128,13 +128,13 @@ export default function EditableEventList({
           <div className="flex gap-2 justify-end">
             <button
               onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 rounded-lg hover:bg-slate-100 text-slate-700 text-sm transition"
+              className="rounded-lg px-4 py-2 text-sm text-white/70 transition hover:bg-white/10"
             >
               Cancel
             </button>
             <button
               onClick={handleAddEvent}
-              className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition"
+              className="rounded-lg bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-500/30"
             >
               Add Event
             </button>
@@ -144,10 +144,7 @@ export default function EditableEventList({
 
       <div className="space-y-2 p-5">
         {events.map((event) => (
-          <div
-            key={event.id}
-            className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 hover:bg-slate-100 transition"
-          >
+          <div key={event.id} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 transition hover:bg-white/10">
             <span
               className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
                 toneStyles[event.tone ?? "emerald"]
@@ -158,15 +155,15 @@ export default function EditableEventList({
 
             <div className="flex-1">
               <div className="flex items-center justify-between gap-3 mb-1">
-                <span className="font-medium text-slate-900">{event.label}</span>
+                <span className="font-medium text-white">{event.label}</span>
                 <div className="flex items-center gap-2">
                   <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${statusStyles[event.status]}`}>
                     {event.status.replace("_", " ")}
                   </span>
-                  <span className="text-xs text-slate-600">{Math.round(event.confidence * 100)}%</span>
+                  <span className="text-xs text-white/55">{Math.round(event.confidence * 100)}%</span>
                 </div>
               </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-slate-200">
+              <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
                 <div
                   className="h-full rounded-full bg-emerald-400"
                   style={{ width: `${Math.max(10, event.confidence * 100)}%` }}
@@ -178,7 +175,7 @@ export default function EditableEventList({
               {event.status !== "approved" && (
                 <button
                   onClick={() => onApproveEvent(event.id)}
-                  className="p-2 rounded-lg hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 transition"
+                  className="rounded-lg p-2 text-white/70 transition hover:bg-emerald-500/15 hover:text-emerald-200"
                   title="Approve event"
                 >
                   <Check size={16} />
@@ -188,14 +185,14 @@ export default function EditableEventList({
                 <>
                   <button
                     onClick={() => setEditingId(event.id)}
-                    className="p-2 rounded-lg hover:bg-slate-100 text-slate-700 transition"
+                    className="rounded-lg p-2 text-white/70 transition hover:bg-white/10"
                     title="Edit event"
                   >
                     <Edit2 size={16} />
                   </button>
                   <button
                     onClick={() => onDeleteEvent(event.id)}
-                    className="p-2 rounded-lg hover:bg-rose-50 text-slate-700 hover:text-rose-700 transition"
+                    className="rounded-lg p-2 text-white/70 transition hover:bg-rose-500/15 hover:text-rose-200"
                     title="Delete event"
                   >
                     <Trash2 size={16} />
@@ -206,36 +203,33 @@ export default function EditableEventList({
 
             {editingId === event.id && (
               <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setEditingId(null)}>
-                <div
-                  className="bg-white rounded-2xl border border-slate-200 p-6 w-96 space-y-4"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <h4 className="text-lg font-semibold text-slate-900">Edit Event</h4>
+                <div className="w-96 space-y-4 rounded-2xl border border-white/10 bg-[#0b0b0b] p-6" onClick={(e) => e.stopPropagation()}>
+                  <h4 className="text-lg font-semibold text-white">Edit Event</h4>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-2">Time (MM:SS)</label>
+                      <label className="mb-2 block text-xs font-semibold text-white/55">Time (MM:SS)</label>
                       <input
                         type="text"
                         value={event.time}
                         onChange={(e) =>
                           onEditEvent(event.id, { time: e.target.value })
                         }
-                        className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 text-sm"
+                        className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-2">Label</label>
+                      <label className="mb-2 block text-xs font-semibold text-white/55">Label</label>
                       <input
                         type="text"
                         value={event.label}
                         onChange={(e) =>
                           onEditEvent(event.id, { label: e.target.value })
                         }
-                        className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 text-sm"
+                        className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-2">Confidence %</label>
+                      <label className="mb-2 block text-xs font-semibold text-white/55">Confidence %</label>
                       <input
                         type="number"
                         min="0"
@@ -246,14 +240,14 @@ export default function EditableEventList({
                             confidence: Number(e.target.value) / 100,
                           })
                         }
-                        className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-slate-900 text-sm"
+                        className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm text-white"
                       />
                     </div>
                   </div>
                   <div className="flex gap-2 justify-end">
                     <button
                       onClick={() => setEditingId(null)}
-                      className="px-4 py-2 rounded-lg hover:bg-slate-100 text-slate-700 text-sm transition"
+                      className="rounded-lg px-4 py-2 text-sm text-white/70 transition hover:bg-white/10"
                     >
                       Close
                     </button>
@@ -262,7 +256,7 @@ export default function EditableEventList({
                         setEditingId(null);
                         onApproveEvent(event.id);
                       }}
-                      className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium transition"
+                      className="rounded-lg bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-500/30"
                     >
                       Save & Approve
                     </button>

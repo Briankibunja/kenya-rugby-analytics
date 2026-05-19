@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0b0b;
+  --foreground: #f8f8f8;
+  --brand-red: #c81f1f;
+  --brand-green: #11834a;
+  --brand-black: #050505;
+  --panel: #0f0f0f;
+  --muted: #bfbfbf;
 }
 
 @theme inline {
@@ -20,19 +25,54 @@
 }
 
 body {
-  background-color: #f8faf6;
+  background-color: var(--background);
   background-image:
-    radial-gradient(circle at top, rgba(21, 128, 61, 0.05), transparent 38%),
-    radial-gradient(circle at bottom right, rgba(185, 28, 28, 0.045), transparent 32%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(248, 250, 246, 0.95));
+    radial-gradient(circle at 10% 10%, rgba(24,24,24,0.35), transparent 20%),
+    linear-gradient(180deg, rgba(10,10,10,0.02), rgba(255,255,255,0.02));
   background-attachment: fixed;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .brand-blend {
-  background: linear-gradient(90deg, #b91c1c 0%, #15803d 52%, #111111 100%);
+  background: linear-gradient(90deg, var(--brand-red) 0%, var(--brand-green) 52%, var(--brand-black) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+/* Header and footer to match the provided theme */
+.site-header {
+  background: linear-gradient(90deg, var(--brand-black) 0%, rgba(0,0,0,0.98) 60%);
+  color: var(--foreground);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.site-footer {
+  background: linear-gradient(90deg, var(--brand-black) 0%, rgba(0,0,0,0.98) 60%);
+  color: var(--muted);
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Hero/banner styles */
+.hero-banner {
+  background-color: #090909;
+  background-image: linear-gradient(90deg, rgba(200,31,31,0.04), rgba(17,131,74,0.03));
+  background-blend-mode: overlay;
+  color: var(--foreground);
+}
+
+/* Accent utilities */
+.cta-red { background-color: var(--brand-red); color: white; }
+.cta-red:hover { background-color: #a21818 }
+.accent-green { color: var(--brand-green) }
+.panel-surface { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06)); border: 1px solid rgba(255,255,255,0.03); }
+
+/* Small texture underlay to match the site image */
+.subtle-texture {
+  background-image: url('/textures/brick-subtle.svg');
+  opacity: 0.06;
+  mix-blend-mode: overlay;
 }

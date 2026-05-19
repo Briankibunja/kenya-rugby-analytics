@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Play } from "lucide-react";
+import { Play } from "./Icons";
 
 interface VideoClip {
   title: string;
@@ -43,8 +43,8 @@ export default function VideoBreakdownSection({ clips, onClipClick }: VideoBreak
   ];
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.12)]">
-      <div className="border-b border-slate-200 bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950 px-5 py-5 text-white">
+    <div className="overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+      <div className="border-b border-white/10 bg-gradient-to-r from-black via-slate-950 to-emerald-950 px-5 py-5 text-white">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/60">Video Analysis</p>
@@ -53,7 +53,7 @@ export default function VideoBreakdownSection({ clips, onClipClick }: VideoBreak
               Browse the highest-value clip categories and jump straight into the moments that matter.
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-right backdrop-blur">
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-right backdrop-blur">
             <p className="text-[11px] uppercase tracking-[0.3em] text-white/50">Clip Groups</p>
             <p className="mt-1 text-2xl font-bold text-white">{clips.length}</p>
           </div>
@@ -65,12 +65,12 @@ export default function VideoBreakdownSection({ clips, onClipClick }: VideoBreak
           <button
             key={idx}
             onClick={() => onClipClick?.(clip)}
-            className={`group relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-100 p-5 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl ${accentThemes[idx % accentThemes.length].glow}`}
+            className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-5 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:bg-white/10 hover:shadow-xl ${accentThemes[idx % accentThemes.length].glow}`}
           >
             <div className={`absolute inset-0 bg-gradient-to-br ${accentThemes[idx % accentThemes.length].ring} opacity-0 transition duration-300 group-hover:opacity-100`} />
             <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-60" />
-            <div className="absolute right-4 top-4 rounded-full border border-black/5 bg-white/80 p-2 shadow-sm transition group-hover:scale-105">
-              <Play size={16} className="text-slate-900" fill="currentColor" />
+            <div className="absolute right-4 top-4 rounded-full border border-white/10 bg-black/40 p-2 shadow-sm transition group-hover:scale-105">
+              <Play size={16} className="text-white" fill="currentColor" />
             </div>
 
             <div className="relative space-y-4">
@@ -80,10 +80,10 @@ export default function VideoBreakdownSection({ clips, onClipClick }: VideoBreak
                     <span className={`h-2.5 w-2.5 rounded-full ${accentThemes[idx % accentThemes.length].dot}`} />
                     {clip.label}
                   </div>
-                  <h4 className="mt-2 text-sm font-semibold text-slate-950 transition group-hover:text-slate-900">
+                  <h4 className="mt-2 text-sm font-semibold text-white transition group-hover:text-white">
                     {clip.title}
                   </h4>
-                  <p className="mt-1 text-xs leading-5 text-slate-600">
+                  <p className="mt-1 text-xs leading-5 text-white/60">
                     Tap to inspect this segment and review the related clips.
                   </p>
                 </div>
@@ -92,17 +92,17 @@ export default function VideoBreakdownSection({ clips, onClipClick }: VideoBreak
                 </span>
               </div>
 
-              <div className="rounded-2xl border border-white/70 bg-white/70 px-3 py-2 backdrop-blur-sm">
-                <p className="text-xs font-medium text-slate-500">Match window</p>
-                <p className="mt-1 text-sm font-semibold text-slate-900">{clip.time}</p>
+              <div className="rounded-2xl border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-sm">
+                <p className="text-xs font-medium text-white/45">Match window</p>
+                <p className="mt-1 text-sm font-semibold text-white">{clip.time}</p>
               </div>
             </div>
           </button>
         ))}
       </div>
 
-      <div className="border-t border-slate-200 bg-gradient-to-r from-slate-50 to-emerald-50 px-5 py-4">
-        <p className="text-sm text-slate-700">
+      <div className="border-t border-white/10 bg-gradient-to-r from-black/20 to-emerald-950/30 px-5 py-4">
+        <p className="text-sm text-white/70">
           Tip: click any statistic in the Analysis tab to filter directly to the matching clip group.
         </p>
       </div>

@@ -25,9 +25,9 @@ export default function ProgressLineChart({
   }, []);
 
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-xl">
-      <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-      {subtitle ? <p className="mt-1 text-sm text-slate-600">{subtitle}</p> : null}
+    <section className="rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+      {subtitle ? <p className="mt-1 text-sm text-white/60">{subtitle}</p> : null}
       <div className="mt-6 h-64">
         {mounted ? (
           <ResponsiveContainer width="100%" height="100%" minWidth={280} minHeight={240}>
@@ -43,7 +43,7 @@ export default function ProgressLineChart({
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 text-sm text-slate-500">
+          <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/5 text-sm text-white/55">
             Loading chart...
           </div>
         )}

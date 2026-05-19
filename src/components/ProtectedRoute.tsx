@@ -15,8 +15,12 @@ export function ProtectedRoute({
   const router = useRouter();
 
   useEffect(() => {
+    router.prefetch("/login");
+  }, [router]);
+
+  useEffect(() => {
     if (user === null) {
-      router.push("/login");
+      router.replace("/login");
       return;
     }
 

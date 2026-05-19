@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { AlertCircle, TrendingUp } from "lucide-react";
+import { AlertCircle, TrendingUp } from "./Icons";
 
 interface OpponentPattern {
   phase: string;
@@ -34,42 +34,42 @@ export default function OpponentAnalysis({
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Attack Patterns */}
-      <div className="rounded-3xl border border-slate-200 bg-white shadow-xl overflow-hidden">
-        <div className="p-5 border-b border-slate-200">
+      <div className="overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+        <div className="border-b border-white/10 p-5">
           <div className="flex items-center gap-2">
             <TrendingUp className="text-emerald-500" size={20} />
             <div>
-              <h3 className="text-lg font-semibold text-slate-900">Attack Patterns</h3>
-              <p className="text-sm text-slate-600 mt-1">Opponent tendency analysis</p>
+              <h3 className="text-lg font-semibold text-white">Attack Patterns</h3>
+              <p className="mt-1 text-sm text-white/60">Opponent tendency analysis</p>
             </div>
           </div>
         </div>
 
-        <div className="p-5 space-y-4">
-          <div className="rounded-2xl bg-slate-50 p-4 border border-slate-100">
+        <div className="space-y-4 p-5">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-slate-700">Preferred Attack Side</span>
-              <span className="text-2xl font-bold text-emerald-600">{preferredAttackSide}</span>
+              <span className="text-sm font-medium text-white/70">Preferred Attack Side</span>
+              <span className="text-2xl font-bold text-emerald-300">{preferredAttackSide}</span>
             </div>
-            <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div className="h-2 overflow-hidden rounded-full bg-white/10">
               <div
                 className="h-full bg-emerald-400 rounded-full"
                 style={{ width: `${preferredAttackPercentage}%` }}
               />
             </div>
-            <p className="text-xs text-slate-500 mt-2">{preferredAttackPercentage}% of attacks</p>
+            <p className="mt-2 text-xs text-white/55">{preferredAttackPercentage}% of attacks</p>
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-slate-900">Match Phase Patterns</h4>
+            <h4 className="text-sm font-semibold text-white">Match Phase Patterns</h4>
             {patterns.map((p, idx) => (
-              <div key={idx} className="flex items-start gap-3 rounded-xl bg-slate-50 p-3 border border-slate-100">
+              <div key={idx} className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
                 <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${threatColors[p.threat]}`}>
                   {p.threat}
                 </span>
                 <div>
-                  <p className="text-sm font-medium text-slate-900">{p.phase}</p>
-                  <p className="text-xs text-slate-600">{p.pattern}</p>
+                  <p className="text-sm font-medium text-white">{p.phase}</p>
+                  <p className="text-xs text-white/60">{p.pattern}</p>
                 </div>
               </div>
             ))}
@@ -80,55 +80,55 @@ export default function OpponentAnalysis({
       {/* Weak Zones & Key Players */}
       <div className="space-y-6">
         {/* Weak Defensive Zones */}
-        <div className="rounded-3xl border border-slate-200 bg-white shadow-xl overflow-hidden">
-          <div className="p-5 border-b border-slate-200">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+          <div className="border-b border-white/10 p-5">
             <div className="flex items-center gap-2">
               <AlertCircle className="text-rose-500" size={20} />
               <div>
-                <h3 className="text-lg font-semibold text-slate-900">Defensive Weaknesses</h3>
-                <p className="text-sm text-slate-600 mt-1">Zones to exploit</p>
+                <h3 className="text-lg font-semibold text-white">Defensive Weaknesses</h3>
+                <p className="mt-1 text-sm text-white/60">Zones to exploit</p>
               </div>
             </div>
           </div>
 
-          <div className="p-5 space-y-2">
+          <div className="space-y-2 p-5">
             {weakDefensiveZones.map((zone, idx) => (
-              <div key={idx} className="flex items-center gap-3 rounded-lg bg-rose-50 border border-rose-100 p-3">
+              <div key={idx} className="flex items-center gap-3 rounded-lg border border-rose-400/20 bg-rose-500/10 p-3">
                 <div className="w-2 h-2 rounded-full bg-rose-400" />
-                <span className="text-sm text-slate-900">{zone}</span>
+                <span className="text-sm text-white">{zone}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Strong Areas */}
-        <div className="rounded-3xl border border-slate-200 bg-white shadow-xl overflow-hidden">
-          <div className="p-5 border-b border-slate-200">
-            <h3 className="text-lg font-semibold text-slate-900">Strong Areas</h3>
-            <p className="text-sm text-slate-600 mt-1">Areas of defensive strength</p>
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+          <div className="border-b border-white/10 p-5">
+            <h3 className="text-lg font-semibold text-white">Strong Areas</h3>
+            <p className="mt-1 text-sm text-white/60">Areas of defensive strength</p>
           </div>
 
-          <div className="p-5 space-y-2">
+          <div className="space-y-2 p-5">
             {strongAreas.map((area, idx) => (
-              <div key={idx} className="flex items-center gap-3 rounded-lg bg-emerald-50 border border-emerald-100 p-3">
+              <div key={idx} className="flex items-center gap-3 rounded-lg border border-emerald-400/20 bg-emerald-500/10 p-3">
                 <div className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span className="text-sm text-slate-900">{area}</span>
+                <span className="text-sm text-white">{area}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Key Players */}
-        <div className="rounded-3xl border border-slate-200 bg-white shadow-xl overflow-hidden">
-          <div className="p-5 border-b border-slate-200">
-            <h3 className="text-lg font-semibold text-slate-900">Key Players to Watch</h3>
-            <p className="text-sm text-slate-600 mt-1">Opponent impact players</p>
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+          <div className="border-b border-white/10 p-5">
+            <h3 className="text-lg font-semibold text-white">Key Players to Watch</h3>
+            <p className="mt-1 text-sm text-white/60">Opponent impact players</p>
           </div>
 
-          <div className="p-5 space-y-2">
+          <div className="space-y-2 p-5">
             {keyPlayers.map((player, idx) => (
-              <div key={idx} className="rounded-lg bg-slate-50 border border-slate-100 p-3">
-                <p className="text-sm text-slate-900">{player}</p>
+              <div key={idx} className="rounded-lg border border-white/10 bg-white/5 p-3">
+                <p className="text-sm text-white">{player}</p>
               </div>
             ))}
           </div>

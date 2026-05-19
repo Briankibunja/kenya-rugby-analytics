@@ -28,7 +28,17 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-slate-50 text-slate-900 flex flex-col">
+      <head>
+        <link rel="dns-prefetch" href="//web.facebook.com" />
+        <link rel="dns-prefetch" href="//www.instagram.com" />
+        <link rel="dns-prefetch" href="//x.com" />
+        <link rel="dns-prefetch" href="//www.youtube.com" />
+        <link rel="preconnect" href="https://web.facebook.com" />
+        <link rel="preconnect" href="https://www.instagram.com" />
+        <link rel="preconnect" href="https://x.com" />
+        <link rel="preconnect" href="https://www.youtube.com" />
+      </head>
+      <body className="min-h-full flex flex-col bg-black text-white">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

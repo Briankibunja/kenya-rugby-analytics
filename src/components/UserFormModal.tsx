@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { X } from "./Icons";
 import type { User } from "./UserManagementTable";
 
 interface UserFormModalProps {
@@ -58,15 +58,15 @@ export default function UserFormModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="rounded-3xl border border-slate-200 bg-white shadow-2xl w-full max-w-md mx-4">
+      <div className="mx-4 w-full max-w-md rounded-3xl border border-white/10 bg-[#0b0b0b] shadow-[0_24px_80px_rgba(0,0,0,0.5)]">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 p-6">
-          <h2 className="text-xl font-semibold text-slate-900">
+        <div className="flex items-center justify-between border-b border-white/10 p-6">
+          <h2 className="text-xl font-semibold text-white">
             {user ? "Edit User" : "Create New User"}
           </h2>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-slate-100 text-slate-700 transition"
+            className="rounded-lg p-1 text-white/70 transition hover:bg-white/10"
           >
             <X size={20} />
           </button>
@@ -76,14 +76,14 @@ export default function UserFormModal({
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-white/70">
               Full Name
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none transition"
+              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-white/35 focus:border-emerald-400 focus:outline-none transition"
               placeholder="John Kipchoge"
               required
             />
@@ -91,14 +91,14 @@ export default function UserFormModal({
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-white/70">
               Email
             </label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-none transition"
+              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-white/35 focus:border-emerald-400 focus:outline-none transition"
               placeholder="john@kcbrugby.com"
               required
             />
@@ -106,13 +106,13 @@ export default function UserFormModal({
 
           {/* Role */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-white/70">
               Role
             </label>
             <select
               value={formData.role}
               onChange={(e) => setFormData({ ...formData, role: e.target.value as User["role"] })}
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-900 focus:border-emerald-500 focus:outline-none transition"
+              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-emerald-400 focus:outline-none transition"
             >
               <option value="admin">Admin</option>
               <option value="coach">Coach</option>
@@ -124,13 +124,13 @@ export default function UserFormModal({
           {/* Team - only show for coach and player */}
           {(formData.role === "coach" || formData.role === "player") && (
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-white/70">
                 Team
               </label>
               <select
                 value={formData.team || ""}
                 onChange={(e) => setFormData({ ...formData, team: e.target.value || null })}
-                className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-900 focus:border-emerald-500 focus:outline-none transition"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-emerald-400 focus:outline-none transition"
               >
                 <option value="">Select a team</option>
                 {teams.map((team) => (
@@ -144,13 +144,13 @@ export default function UserFormModal({
 
           {/* Status */}
           <div>
-            <label className="block text-sm font.medium text-slate-700 mb-2">
+            <label className="mb-2 block text-sm font-medium text-white/70">
               Status
             </label>
             <select
               value={formData.status}
               onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-900 focus:border-emerald-500 focus:outline-none transition"
+              className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-emerald-400 focus:outline-none transition"
             >
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
@@ -158,13 +158,13 @@ export default function UserFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-lg border border-slate-200 px-4 py-2 text-slate-700 hover:bg-slate-50 transition font-medium"
+              className="flex-1 rounded-lg border border-white/10 px-4 py-2 font-medium text-white/70 transition hover:bg-white/10"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-700 px-4 py-2 transition font-medium"
+              className="flex-1 rounded-lg bg-emerald-500/20 px-4 py-2 font-medium text-emerald-200 transition hover:bg-emerald-500/30"
             >
               {user ? "Update" : "Create"}
             </button>
