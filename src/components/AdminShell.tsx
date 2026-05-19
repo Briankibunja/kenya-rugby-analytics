@@ -187,13 +187,20 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                 <div className="mt-2 border-t border-white/10 pt-3">
                   <p className="mb-2 text-xs uppercase tracking-[0.3em] text-white/50">View as</p>
                   <div className="grid grid-cols-3 gap-2">
-                    <Link
-                      href="/admin"
-                      onClick={() => handleSwitch("admin")}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        try {
+                          // persist admin role immediately and perform full navigation
+                          if (user) localStorage.setItem("rugby-user", JSON.stringify({ ...user, role: "admin" }));
+                        } catch {}
+                        handleSwitch("admin");
+                        window.location.assign("/admin");
+                      }}
                       className="rounded-lg border border-white/10 bg-white/5 py-2 text-center text-sm font-medium text-white transition hover:border-emerald-400 hover:bg-emerald-400/10"
                     >
                       Admin
-                    </Link>
+                    </button>
                     <Link
                       href="/coach"
                       onClick={() => handleSwitch("coach")}
