@@ -41,6 +41,10 @@ export function ProtectedRoute({
     if (!effectiveRole) {
       try {
         console.trace("ProtectedRoute: redirecting to /login because no effectiveRole", { user, switchingRole });
+        localStorage.setItem(
+          "rugby-debug-protected",
+          JSON.stringify({ ts: Date.now(), reason: "no-effective-role", user, switchingRole })
+        );
       } catch {}
       router.replace("/login");
       return;
@@ -49,6 +53,10 @@ export function ProtectedRoute({
     if (!allowedRoles.includes(effectiveRole as any)) {
       try {
         console.trace("ProtectedRoute: unauthorized role, handling redirect", { effectiveRole, allowedRoles, user, switchingRole });
+        localStorage.setItem(
+          "rugby-debug-protected",
+          JSON.stringify({ ts: Date.now(), reason: "unauthorized-role", effectiveRole, allowedRoles, user, switchingRole })
+        );
       } catch {}
       if (switchingRole) return;
       logout();
