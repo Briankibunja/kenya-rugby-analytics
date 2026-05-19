@@ -241,6 +241,9 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           <button
             type="button"
             onClick={() => {
+              try {
+                console.trace("AdminShell: Return to Admin clicked", { user, switchingRole });
+              } catch {}
               // Ensure role is set and perform a full page navigation to /admin
               handleReturnToAdmin();
               // Use full-nav to avoid client-side ProtectedRoute race

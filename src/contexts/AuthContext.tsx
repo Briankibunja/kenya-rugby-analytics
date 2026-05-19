@@ -58,6 +58,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
+    // Helpful trace to debug unexpected logouts during role switching
+    try {
+      console.trace("AuthContext.logout called", { user, switchingRole });
+    } catch {}
     setUser(null);
     setSwitchingRole(null);
     localStorage.removeItem("rugby-user");

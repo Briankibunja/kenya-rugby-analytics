@@ -39,11 +39,17 @@ export function ProtectedRoute({
     }
 
     if (!effectiveRole) {
+      try {
+        console.trace("ProtectedRoute: redirecting to /login because no effectiveRole", { user, switchingRole });
+      } catch {}
       router.replace("/login");
       return;
     }
 
     if (!allowedRoles.includes(effectiveRole as any)) {
+      try {
+        console.trace("ProtectedRoute: unauthorized role, handling redirect", { effectiveRole, allowedRoles, user, switchingRole });
+      } catch {}
       if (switchingRole) return;
       logout();
       router.replace("/login");
