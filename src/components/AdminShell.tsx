@@ -77,7 +77,17 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const handleReturnToAdmin = () => {
     setRole("admin");
     setMenuOpen(false);
-    clearRoleSwitch();
+  };
+
+  // Ensure a direct navigation to the admin page when returning
+  const handleReturnToAdminAndNavigate = () => {
+    // First request the role change, then navigate, and only clear the 'switchingRole'
+    // flag shortly after to avoid ProtectedRoute seeing an unauthorized state.
+    handleReturnToAdmin();
+    router.replace("/admin");
+    setTimeout(() => {
+      clearRoleSwitch();
+    }, 60);
   };
 
   useEffect(() => {
@@ -230,7 +240,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         <div className="fixed right-4 top-4 z-[60] sm:right-6 sm:top-6 lg:right-8 lg:top-8">
           <Link
             href="/admin"
-            onClick={handleReturnToAdmin}
+            onClick={handleReturnToAdminAndNavigate}
             className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-100 shadow-[0_12px_30px_rgba(0,0,0,0.25)] backdrop-blur transition hover:bg-emerald-400/15"
           >
             Return to Admin
