@@ -238,13 +238,18 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
       {switchingRole !== null && user?.role !== "admin" && (
         <div className="fixed right-4 top-4 z-[60] sm:right-6 sm:top-6 lg:right-8 lg:top-8">
-          <Link
-            href="/admin"
-            onClick={handleReturnToAdminAndNavigate}
+          <button
+            type="button"
+            onClick={() => {
+              // Ensure role is set and perform a full page navigation to /admin
+              handleReturnToAdmin();
+              // Use full-nav to avoid client-side ProtectedRoute race
+              window.location.assign("/admin");
+            }}
             className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-100 shadow-[0_12px_30px_rgba(0,0,0,0.25)] backdrop-blur transition hover:bg-emerald-400/15"
           >
             Return to Admin
-          </Link>
+          </button>
         </div>
       )}
 
