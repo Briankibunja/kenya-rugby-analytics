@@ -245,6 +245,12 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
                 console.trace("AdminShell: Return to Admin clicked", { user, switchingRole });
               } catch {}
               // Ensure role is set and perform a full page navigation to /admin
+              // Write an explicit localStorage entry so the next page sees the admin role
+              try {
+                if (user) {
+                  localStorage.setItem("rugby-user", JSON.stringify({ ...user, role: "admin" }));
+                }
+              } catch {}
               handleReturnToAdmin();
               // Use full-nav to avoid client-side ProtectedRoute race
               window.location.assign("/admin");
